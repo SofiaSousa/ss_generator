@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require_relative '../lib/ss_generator/helpers'
+require_relative '../lib/ss_generator/package'
+require_relative '../lib/ss_generator/generator'
+
+include SSGenerator::Helpers
+
+packages = Dir[File.dirname(__FILE__) + "/../packages/**/init.yaml"].map do |f| 
+	SSGenerator::Package.new(transform_keys_to_symbols(YAML.load_file(f)))
+end
+
+if packages
+	level = 0
+	package = nil
+
+	SSGenerator::Generator.init(packages)
+	loop do
+		answer = gets.chomp.downcase
+
+		if level == 0
+			case answer
+			when /^\d+$/
+				if Integer(answer) <= packages.length
+					level = 1
+					package = packages[Integer(answer)]
+					SSGenerator::Generator.get_package(package)
+				else
+					puts "\nPlease enter a valid option or 'quit' to exit"
+				end
+			end
+		elsif level == 1
+			case answer
+				when 'b'
+					level = 0
+					package = nil
+				 	SSGenerator::Generator.init(packages)
+				when 'g'
+					SSGenerator::Generator.make_files(package)
+					break
+			end
+		end
+
+		# options for all levels
+		case answer
+		when 'quit', 'exit'
+			SSGenerator::Generator.goodbye
+			break
+		end
+	end
+else
+	puts "No packages found!"
+end

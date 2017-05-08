@@ -1,0 +1,29 @@
+name: "Sass Project"
+version: "1.0.0"
+description: "Generates folders and files from a base Sass Project based on http://thesassway.com/beginner/how-to-structure-a-sass-project"
+author: "Sofia Sousa"
+structure: 
+  - item:
+    name: "modules"
+    type: "folder"
+    content:
+      - item:
+        name: "_all.scss"
+        type: "file"
+      - item:
+        name: "_mixins.scss"
+        type: "file"
+      - item:
+        name: "_colors.scss"
+        type: "file"
+  - item:
+    name: "partials"
+    type: "folder"
+    content: 
+      - item:
+        name: "_base.scss"
+        type: "file"
+  - item:
+    name: "style.css"
+    type: "file"
+    content: ""
